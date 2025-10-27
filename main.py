@@ -30,7 +30,6 @@ app.include_router(api_router, prefix="/api/v1")
 
 @app.get("/")
 async def root():
-    """Root endpoint"""
     return {
         "message": "Welcome to SW Task Manager API",
         "version": settings.APP_VERSION,
@@ -40,7 +39,6 @@ async def root():
 
 @app.get("/health")
 async def health_check():
-    """Health check endpoint"""
     return {"status": "healthy", "environment": settings.ENVIRONMENT}
 
 
