@@ -11,6 +11,7 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     password: str = Field(..., min_length=8, max_length=100)
+    email_password: Optional[str] = Field(None, description="User's email password for inbox access")
 
 
 class UserUpdate(BaseModel):
@@ -18,6 +19,7 @@ class UserUpdate(BaseModel):
     username: Optional[str] = Field(None, min_length=3, max_length=50)
     full_name: Optional[str] = None
     password: Optional[str] = Field(None, min_length=8, max_length=100)
+    email_password: Optional[str] = Field(None, description="User's email password for inbox access")
     is_active: Optional[bool] = None
     is_superuser: Optional[bool] = None
 
@@ -29,6 +31,7 @@ class UserLogin(BaseModel):
 
 class UserResponse(UserBase):
     id: int
+    email_password: Optional[str] = None
     is_active: bool
     is_superuser: bool
     created_at: datetime

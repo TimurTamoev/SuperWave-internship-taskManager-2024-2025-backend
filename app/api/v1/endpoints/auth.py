@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.core.security import verify_password, get_password_hash, create_access_token
@@ -38,6 +39,7 @@ async def register(
         username=user_data.username,
         full_name=user_data.full_name,
         hashed_password=hashed_password,
+        email_password=user_data.email_password,
     )
     db.add(new_user)
     db.commit()
@@ -51,9 +53,12 @@ async def register(
     tags=["Общедоступные команды", "Вход"],
     response_model=Token,
 )
-async def login(credentials: UserLogin, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.username == credentials.username).first()
-    if not user or not verify_password(credentials.password, user.hashed_password):
+async def login(
+    form_data: OAuth2PasswordRequestForm = Depends(),
+    db: Session = Depends(get_db)
+):
+    user = db.query(User).filter(User.username == form_data.username).first()
+    if not user or not verify_password(form_data.password, user.hashed_password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",

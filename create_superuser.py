@@ -38,7 +38,9 @@ def create_superuser():
             return
 
         full_name = input("Полное имя(необязательно): ").strip() or None
-
+        
+        email_password = input("Пароль от почты (необязательно, для доступа к inbox): ").strip() or None
+        
         password = input("Пароль (минимальная величина - 8 символов): ").strip()
         if len(password) < 8:
             print("Пароль должен содержать минимум 8 символов.")
@@ -64,6 +66,7 @@ def create_superuser():
             email=email,
             username=username,
             full_name=full_name,
+            email_password=email_password,
             hashed_password=hashed_password,
             is_active=True,
             is_superuser=True,
