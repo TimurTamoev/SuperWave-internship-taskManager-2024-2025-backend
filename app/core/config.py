@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     PORT: int = 8000
     DATABASE_URL: str = "sqlite:///./swtaskmanager.db"
     SECRET_KEY: str = "your-secret-key-change-this-in-production"
+    ENCRYPTION_KEY: str = "your-encryption-key-must-be-32-bytes-long-change-this"
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7

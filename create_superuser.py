@@ -7,7 +7,7 @@
 from sqlalchemy.orm import Session
 from app.core.database import engine, SessionLocal
 from app.models.user import User
-from app.core.security import get_password_hash
+from app.core.security import get_password_hash, encrypt_email_password
 from app.core.database import Base
 
 Base.metadata.create_all(bind=engine)
@@ -62,11 +62,12 @@ def create_superuser():
             return
 
         hashed_password = get_password_hash(password)
+        encrypted_email_password = encrypt_email_password(email_password) if email_password else None
         superuser = User(
             email=email,
             username=username,
             full_name=full_name,
-            email_password=email_password,
+            email_password=encrypted_email_password,
             hashed_password=hashed_password,
             is_active=True,
             is_superuser=True,

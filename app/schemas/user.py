@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, model_validator
 from typing import Optional
 from datetime import datetime
 
@@ -36,6 +36,14 @@ class UserResponse(UserBase):
     is_superuser: bool
     created_at: datetime
     updated_at: Optional[datetime] = None
+
+    @model_validator(mode='after')
+    def decrypt_email_password_field(self):
+        """Decrypt email password when returning user data"""
+        if self.email_password:
+            from app.core.security import decrypt_email_password
+            self.email_password = decrypt_email_password(self.email_password)
+        return self
 
     class Config:
         from_attributes = True

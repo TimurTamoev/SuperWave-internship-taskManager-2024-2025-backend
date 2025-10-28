@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from typing import List
 from app.core.database import get_db
 from app.api.dependencies import get_current_user, get_current_active_superuser
-from app.core.security import get_password_hash
+from app.core.security import get_password_hash, encrypt_email_password, decrypt_email_password
 from app.models.user import User
 from app.schemas.user import UserResponse, UserUpdate
 
@@ -157,7 +157,7 @@ async def update_user(
         user.hashed_password = get_password_hash(user_data.password)
     
     if user_data.email_password is not None:
-        user.email_password = user_data.email_password
+        user.email_password = encrypt_email_password(user_data.email_password) if user_data.email_password else None
 
     if user_data.is_active is not None:
         user.is_active = user_data.is_active

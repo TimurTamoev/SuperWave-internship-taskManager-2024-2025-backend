@@ -2,7 +2,12 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from app.core.database import get_db
-from app.core.security import verify_password, get_password_hash, create_access_token
+from app.core.security import (
+    verify_password, 
+    get_password_hash, 
+    create_access_token,
+    encrypt_email_password
+)
 from app.models.user import User
 from app.schemas.user import UserCreate, UserLogin, UserResponse, Token
 from app.api.dependencies import get_current_active_superuser
@@ -34,12 +39,13 @@ async def register(
         )
 
     hashed_password = get_password_hash(user_data.password)
+    encrypted_email_password = encrypt_email_password(user_data.email_password) if user_data.email_password else None
     new_user = User(
         email=user_data.email,
         username=user_data.username,
         full_name=user_data.full_name,
         hashed_password=hashed_password,
-        email_password=user_data.email_password,
+        email_password=encrypted_email_password,
     )
     db.add(new_user)
     db.commit()
