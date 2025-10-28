@@ -59,7 +59,6 @@ def create_superuser():
             print(f"\nПользователь с таким email уже существует.")
             return
 
-        # Create superuser
         hashed_password = get_password_hash(password)
         superuser = User(
             email=email,
@@ -74,20 +73,17 @@ def create_superuser():
         db.commit()
         db.refresh(superuser)
 
-        print("\n" + "=" * 50)
-        print("✅ Superuser created successfully!")
-        print("=" * 50)
+        print("Админ был создан успешно.")
         print(f"ID: {superuser.id}")
         print(f"Email: {superuser.email}")
-        print(f"Username: {superuser.username}")
-        print(f"Full Name: {superuser.full_name or 'N/A'}")
-        print(f"Is Active: {superuser.is_active}")
-        print(f"Is Superuser: {superuser.is_superuser}")
-        print("=" * 50)
-        print("\n🎉 You can now login with these credentials!")
+        print(f"Имя пользователя: {superuser.username}")
+        print(f"Полное имя: {superuser.full_name or 'N/A'}")
+        print(f"Активен: {superuser.is_active}")
+        print(f"Админ: {superuser.is_superuser}")
+        print("\nТеперь вы можете войти с этими учетными данными.")
 
     except Exception as e:
-        print(f"\n❌ Error creating superuser: {e}")
+        print(f"\nОшибка при создании админа: {e}")
         db.rollback()
     finally:
         db.close()

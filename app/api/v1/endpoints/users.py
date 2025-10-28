@@ -26,7 +26,7 @@ async def get_current_user_info(current_user: User = Depends(get_current_user)):
 @router.get(
     "/user/get/all",
     summary="Получить информацию о всех пользователях. Доступно только для админа",
-    tags=[],
+    tags=["Команды админа"],
     response_model=List[UserResponse],
 )
 async def get_all_users(

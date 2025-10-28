@@ -10,7 +10,7 @@ Base.metadata.create_all(bind=engine)
 app = FastAPI(
     title=settings.APP_NAME,
     version=settings.APP_VERSION,
-    description="Backend API for SuperWave Task Manager",
+    description="Backend для сервиса по организации задач ООО СуперВейв групп",
     docs_url="/api/docs",
     redoc_url="/api/redoc",
     openapi_url="/api/openapi.json",
@@ -31,15 +31,15 @@ app.include_router(api_router, prefix="/api/v1")
 @app.get("/", summary = "Начальная страница", tags = ["Начальная страница"])
 async def root():
     return {
-        "message": "Welcome to SW Task Manager API",
-        "version": settings.APP_VERSION,
-        "docs": "/api/docs",
+        "сообщение": "Добро пожаловать в API системы по организации задачи ООО СуперВейв групп",
+        "Версия": settings.APP_VERSION,
+        "Документация": "/api/docs",
     }
 
 
 @app.get("/health", summary = "Проверить состояние сервера", tags = ["Состояние сервера"])
 async def health_check():
-    return {"status": "healthy", "environment": settings.ENVIRONMENT}
+    return {"Статус": "Запущен", "Статус разработки": settings.ENVIRONMENT}
 
 
 if __name__ == "__main__":

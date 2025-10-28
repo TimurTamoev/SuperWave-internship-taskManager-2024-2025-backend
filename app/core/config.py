@@ -3,10 +3,10 @@ from typing import List
 
 
 class Settings(BaseSettings):
-    APP_NAME: str = "SW Task Manager"
+    APP_NAME: str = "Менеджер задач ООО СуперВейв групп"
     APP_VERSION: str = "1.0.0"
     DEBUG: bool = True
-    ENVIRONMENT: str = "development"
+    ENVIRONMENT: str = "Разработка. Локально"
     HOST: str = "0.0.0.0"
     PORT: int = 8000
     DATABASE_URL: str = "sqlite:///./swtaskmanager.db"
