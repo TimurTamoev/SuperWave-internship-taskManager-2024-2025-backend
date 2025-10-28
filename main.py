@@ -28,7 +28,7 @@ app.add_middleware(GZipMiddleware, minimum_size=1000)
 app.include_router(api_router, prefix="/api/v1")
 
 
-@app.get("/")
+@app.get("/", summary = "Начальная страница", tags = ["Начальная страница"])
 async def root():
     return {
         "message": "Welcome to SW Task Manager API",
@@ -37,7 +37,7 @@ async def root():
     }
 
 
-@app.get("/health")
+@app.get("/health", summary = "Проверить состояние сервера", tags = ["Состояние сервера"])
 async def health_check():
     return {"status": "healthy", "environment": settings.ENVIRONMENT}
 

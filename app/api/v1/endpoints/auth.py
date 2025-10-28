@@ -10,7 +10,11 @@ router = APIRouter()
 
 
 @router.post(
-    "/users/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED
+    "/users/register",
+    summary="Создать профиль пользователя. Доступно только админу",
+    tags=["Команды админа", "Создание пользователя"],
+    response_model=UserResponse,
+    status_code=status.HTTP_201_CREATED,
 )
 async def register(
     user_data: UserCreate,
@@ -41,7 +45,12 @@ async def register(
     return new_user
 
 
-@router.post("/login", response_model=Token)
+@router.post(
+    "/login",
+    summary="Войти.\n Доступно для всех пользователей",
+    tags=["Общедоступные команды", "Вход"],
+    response_model=Token,
+)
 async def login(credentials: UserLogin, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.username == credentials.username).first()
     if not user or not verify_password(credentials.password, user.hashed_password):
