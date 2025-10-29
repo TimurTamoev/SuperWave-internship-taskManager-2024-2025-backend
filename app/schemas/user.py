@@ -39,7 +39,6 @@ class UserResponse(UserBase):
 
     @model_validator(mode='after')
     def decrypt_email_password_field(self):
-        """Decrypt email password when returning user data"""
         if self.email_password:
             from app.core.security import decrypt_email_password
             self.email_password = decrypt_email_password(self.email_password)

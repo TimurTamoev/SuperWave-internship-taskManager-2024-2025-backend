@@ -52,7 +52,6 @@ def decode_token(token: str) -> Optional[dict]:
 
 
 def encrypt_email_password(plain_password: str) -> str:
-    """Encrypt email password for secure storage"""
     if not plain_password:
         return None
     fernet = _get_fernet()
@@ -61,7 +60,6 @@ def encrypt_email_password(plain_password: str) -> str:
 
 
 def decrypt_email_password(encrypted_password: str) -> Optional[str]:
-    """Decrypt email password for use"""
     if not encrypted_password:
         return None
     try:

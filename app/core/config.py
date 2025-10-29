@@ -3,7 +3,7 @@ from typing import List
 
 
 class Settings(BaseSettings):
-    APP_NAME: str = "Менеджер задач ООО СуперВейв групп"
+    APP_NAME: str = "Менеджер задач СуперВейв"
     APP_VERSION: str = "1.0.0"
     DEBUG: bool = True
     ENVIRONMENT: str = "Разработка. Локально"
