@@ -20,7 +20,7 @@ router = APIRouter()
 @router.post(
     "/response/create",
     summary="Создать шаблон ответа",
-    tags=["Response Templates"],
+    tags=["Шаблоны ответов"],
     response_model=ResponseTemplateResponse,
     status_code=status.HTTP_201_CREATED,
 )
@@ -46,7 +46,7 @@ async def create_response_template(
 @router.get(
     "/response/all",
     summary="Получить все шаблоны ответов текущего пользователя",
-    tags=["Response Templates"],
+    tags=["Шаблоны ответов"],
     response_model=List[ResponseTemplateResponse],
 )
 async def get_all_response_templates(
@@ -69,7 +69,7 @@ async def get_all_response_templates(
 @router.get(
     "/response/{template_id}",
     summary="Получить шаблон ответа по ID",
-    tags=["Response Templates"],
+    tags=["Шаблоны ответов"],
     response_model=ResponseTemplateResponse,
 )
 async def get_response_template(
@@ -98,7 +98,7 @@ async def get_response_template(
 @router.put(
     "/response/{template_id}",
     summary="Обновить шаблон ответа",
-    tags=["Response Templates"],
+    tags=["Шаблоны ответов"],
     response_model=ResponseTemplateResponse,
 )
 async def update_response_template(
@@ -140,7 +140,7 @@ async def update_response_template(
 @router.delete(
     "/response/{template_id}",
     summary="Удалить шаблон ответа",
-    tags=["Response Templates"],
+    tags=["Шаблоны ответов"],
     status_code=status.HTTP_204_NO_CONTENT,
 )
 async def delete_response_template(
@@ -172,7 +172,7 @@ async def delete_response_template(
 @router.post(
     "/response/attach",
     summary="Прикрепить шаблон ответа к письму",
-    tags=["Response Templates", "Email Attachments"],
+    tags=["Шаблоны ответов", "Прикрепление ответа к письму"],
     response_model=EmailResponseAttachmentResponse,
     status_code=status.HTTP_201_CREATED,
 )
@@ -212,7 +212,6 @@ async def attach_response_to_email(
             detail="Этот шаблон уже прикреплен к данному письму",
         )
     
-    # Создать связь
     attachment = EmailResponseAttachment(
         user_id=current_user.id,
         email_uid=attachment_data.email_uid,
@@ -232,7 +231,7 @@ async def attach_response_to_email(
 @router.get(
     "/response/attachments/email/{email_uid}",
     summary="Получить все ответы, прикрепленные к письму",
-    tags=["Response Templates", "Email Attachments"],
+    tags=["Шаблоны ответов", "Прикрепление ответа к письму"],
     response_model=List[EmailResponseAttachmentResponse],
 )
 async def get_email_attachments(
@@ -255,7 +254,7 @@ async def get_email_attachments(
 @router.get(
     "/response/attachments/template/{template_id}",
     summary="Получить все письма с прикрепленным шаблоном",
-    tags=["Response Templates", "Email Attachments"],
+    tags=["Шаблоны ответов", "Прикрепление ответа к письму"],
     response_model=List[EmailWithAttachedResponse],
 )
 async def get_template_attachments(
@@ -305,7 +304,7 @@ async def get_template_attachments(
 @router.delete(
     "/response/attachment/{attachment_id}",
     summary="Удалить связь между письмом и шаблоном ответа",
-    tags=["Response Templates", "Email Attachments"],
+    tags=["Шаблоны ответов", "Прикрепление ответа к письму"],
     status_code=status.HTTP_204_NO_CONTENT,
 )
 async def delete_email_attachment(
@@ -337,7 +336,7 @@ async def delete_email_attachment(
 @router.get(
     "/response/attachments/all",
     summary="Получить все связи письмо-ответ текущего пользователя",
-    tags=["Response Templates", "Email Attachments"],
+    tags=["Шаблоны ответов", "Прикрепление ответа к письму"],
     response_model=List[EmailResponseAttachmentResponse],
 )
 async def get_all_attachments(
