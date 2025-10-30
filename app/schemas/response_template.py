@@ -4,8 +4,8 @@ from datetime import datetime
 
 
 class ResponseTemplateBase(BaseModel):
-    title: str = Field(..., min_length=1, max_length=25, description="Заголовок шаблона ответа")
-    body: str = Field(..., min_length=1, max_length=100, description="Текст ответа")
+    title: str = Field(..., min_length=1, max_length=200, description="Заголовок шаблона ответа")
+    body: str = Field(..., min_length=1, max_length=2000, description="Текст ответа")
     send_response: bool = Field(default=False, description="Отправлять ли ответ автоматически")
 
 
@@ -14,8 +14,8 @@ class ResponseTemplateCreate(ResponseTemplateBase):
 
 
 class ResponseTemplateUpdate(BaseModel):
-    title: Optional[str] = Field(None, min_length=1, max_length=25, description="Заголовок шаблона ответа")
-    body: Optional[str] = Field(None, min_length=1, max_length=100, description="Текст ответа")
+    title: Optional[str] = Field(None, min_length=1, max_length=200, description="Заголовок шаблона ответа")
+    body: Optional[str] = Field(None, min_length=1, max_length=2000, description="Текст ответа")
     send_response: Optional[bool] = Field(None, description="Отправлять ли ответ автоматически")
 
 
@@ -31,10 +31,10 @@ class ResponseTemplateResponse(ResponseTemplateBase):
 
 class EmailResponseAttachmentCreate(BaseModel):
     email_uid: str = Field(..., description="UID письма из IMAP")
-    email_subject: Optional[str] = Field(None, description="Тема письма")
-    email_from: Optional[str] = Field(None, description="От кого письмо")
     response_template_id: int = Field(..., description="ID шаблона ответа")
-    notes: Optional[str] = Field(None, description="Дополнительные заметки")
+    email_subject: Optional[str] = Field(None, description="Тема письма (опционально)")
+    email_from: Optional[str] = Field(None, description="От кого письмо (опционально)")
+    notes: Optional[str] = Field(None, description="Дополнительные заметки (опционально)")
 
 
 class EmailResponseAttachmentResponse(BaseModel):

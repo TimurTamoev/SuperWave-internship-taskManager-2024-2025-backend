@@ -20,6 +20,14 @@ class Settings(BaseSettings):
     CORS_ALLOW_METHODS: List[str] = ["*"]
     CORS_ALLOW_HEADERS: List[str] = ["*"]
     RATE_LIMIT_PER_MINUTE: int = 60
+    
+    SMTP_SERVER: str = "smtp.mail.ru"
+    SMTP_PORT: int = 587
+    SMTP_USERNAME: str = "xoxolly09@mail.ru"
+    SMTP_PASSWORD: str = "BaqjUHvfRN4Yy7kzeE2n"
+    SMTP_FROM_EMAIL: str = "xoxolly09@mail.ru"
+    SMTP_FROM_NAME: str = "SWTaskManager"
+    SMTP_USE_TLS: bool = True
 
     class Config:
         env_file = ".env"

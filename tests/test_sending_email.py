@@ -91,16 +91,24 @@ def attach_template_to_email(token: str, email_uid: str, template_id: int,
     print(f"\n=== Прикрепление шаблона {template_id} к письму {email_uid} ===")
     headers = {"Authorization": f"Bearer {token}"}
     
+    # Минимальные данные: только email_uid и response_template_id
+    data = {
+        "email_uid": email_uid,
+        "response_template_id": template_id,
+    }
+    
+    # Опциональные поля
+    if subject:
+        data["email_subject"] = subject
+    if from_addr:
+        data["email_from"] = from_addr
+    if notes:
+        data["notes"] = notes
+    
     response = requests.post(
         f"{BASE_URL}/responses/response/attach",
         headers=headers,
-        json={
-            "email_uid": email_uid,
-            "email_subject": subject,
-            "email_from": from_addr,
-            "response_template_id": template_id,
-            "notes": notes
-        }
+        json=data
     )
     
     print(f"Status: {response.status_code}")
