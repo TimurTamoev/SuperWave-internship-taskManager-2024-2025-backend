@@ -10,17 +10,15 @@ from app.schemas.user import UserResponse, UserUpdate
 
 router = APIRouter()
 
-"""
-Пока не уверен начсет этого эндпоинта тк в процессе разработки переосмыслил иерархию пользователей. 
+
 @router.get(
-    "/user/get/me",
-    summary="Получить информацию о текущем пользователе. Доступ возможен только для админа",
-    tags=["Команды админа"],
+    "/me",
+    summary="Получить информацию о текущем пользователе",
+    tags=["Профиль пользователя"],
     response_model=UserResponse,
 )
 async def get_current_user_info(current_user: User = Depends(get_current_user)):
     return current_user
-"""
 
 
 @router.get(

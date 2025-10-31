@@ -216,13 +216,10 @@ async def attach_response_to_email(
     db.commit()
     db.refresh(attachment)
     
-    # Если send_response=True, автоматически отправить email
     if template.send_response:
-        # Получить email получателя
         recipient_email = attachment_data.email_from
         
         if not recipient_email:
-            # Если email_from не указан, создать запись об ошибке
             sent_email = SentEmail(
                 user_id=current_user.id,
                 attachment_id=attachment.id,
@@ -238,7 +235,6 @@ async def attach_response_to_email(
             db.add(sent_email)
             db.commit()
         else:
-            # Отправить email через SMTP
             smtp_service = SMTPService()
             success, message = smtp_service.send_email(
                 to_email=recipient_email,
@@ -248,7 +244,6 @@ async def attach_response_to_email(
                 is_html=False
             )
             
-            # Сохранить запись об отправке
             sent_email = SentEmail(
                 user_id=current_user.id,
                 attachment_id=attachment.id,
