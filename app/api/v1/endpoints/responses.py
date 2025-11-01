@@ -103,19 +103,19 @@ async def update_response_template(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    template = (
-        db.query(ResponseTemplate)
-        .filter(
-            ResponseTemplate.id == template_id,
-            ResponseTemplate.user_id == current_user.id
-        )
-        .first()
-    )
+    template = db.query(ResponseTemplate).filter(ResponseTemplate.id == template_id).first()
     
     if not template:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Шаблон ответа не найден",
+        )
+    
+    # Check permissions: admin can update any, regular user can only update their own
+    if not current_user.is_superuser and template.user_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="У вас нет прав для редактирования этого шаблона",
         )
     
     if template_data.title is not None:
@@ -272,7 +272,7 @@ async def attach_response_to_email(
 
 @router.get(
     "/response/attachments/email/{email_uid}",
-    summary="Получить все ответы, прикрепленные к письму",
+    summary="Получить все ответы, прикрепленные к письму (доступны всем)",
     tags=["Шаблоны ответов", "Прикрепление ответа к письму"],
     response_model=List[EmailResponseAttachmentResponse],
 )
@@ -283,10 +283,7 @@ async def get_email_attachments(
 ):
     attachments = (
         db.query(EmailResponseAttachment)
-        .filter(
-            EmailResponseAttachment.user_id == current_user.id,
-            EmailResponseAttachment.email_uid == email_uid
-        )
+        .filter(EmailResponseAttachment.email_uid == email_uid)
         .all()
     )
     
@@ -295,7 +292,7 @@ async def get_email_attachments(
 
 @router.get(
     "/response/attachments/template/{template_id}",
-    summary="Получить все письма текущего пользователя с прикрепленным шаблоном",
+    summary="Получить все письма с прикрепленным шаблоном (доступны всем)",
     tags=["Шаблоны ответов", "Прикрепление ответа к письму"],
     response_model=List[EmailWithAttachedResponse],
 )
@@ -314,10 +311,7 @@ async def get_template_attachments(
     
     attachments = (
         db.query(EmailResponseAttachment)
-        .filter(
-            EmailResponseAttachment.user_id == current_user.id,
-            EmailResponseAttachment.response_template_id == template_id
-        )
+        .filter(EmailResponseAttachment.response_template_id == template_id)
         .all()
     )
     
@@ -338,7 +332,7 @@ async def get_template_attachments(
 
 @router.delete(
     "/response/attachment/{attachment_id}",
-    summary="Удалить связь между письмом и шаблоном ответа",
+    summary="Удалить связь между письмом и шаблоном ответа (может удалить любой пользователь)",
     tags=["Шаблоны ответов", "Прикрепление ответа к письму"],
     status_code=status.HTTP_204_NO_CONTENT,
 )
@@ -349,10 +343,7 @@ async def delete_email_attachment(
 ):
     attachment = (
         db.query(EmailResponseAttachment)
-        .filter(
-            EmailResponseAttachment.id == attachment_id,
-            EmailResponseAttachment.user_id == current_user.id
-        )
+        .filter(EmailResponseAttachment.id == attachment_id)
         .first()
     )
     
@@ -370,7 +361,7 @@ async def delete_email_attachment(
 
 @router.get(
     "/response/attachments/all",
-    summary="Получить все связи письмо-ответ текущего пользователя",
+    summary="Получить все связи письмо-ответ (доступны всем пользователям)",
     tags=["Шаблоны ответов", "Прикрепление ответа к письму"],
     response_model=List[EmailResponseAttachmentResponse],
 )
@@ -382,7 +373,6 @@ async def get_all_attachments(
 ):
     attachments = (
         db.query(EmailResponseAttachment)
-        .filter(EmailResponseAttachment.user_id == current_user.id)
         .offset(skip)
         .limit(limit)
         .all()
