@@ -23,9 +23,9 @@ class Settings(BaseSettings):
     
     SMTP_SERVER: str = "smtp.mail.ru"
     SMTP_PORT: int = 587
-    SMTP_USERNAME: str = "xoxolly09@mail.ru"
-    SMTP_PASSWORD: str = "BaqjUHvfRN4Yy7kzeE2n"
-    SMTP_FROM_EMAIL: str = "xoxolly09@mail.ru"
+    SMTP_USERNAME: str = ""
+    SMTP_PASSWORD: str = ""
+    SMTP_FROM_EMAIL: str = ""
     SMTP_FROM_NAME: str = "ООО СуперВейв Групп"
     SMTP_USE_TLS: bool = True
 
