@@ -135,7 +135,7 @@ async def update_response_template(
 
 @router.delete(
     "/response/{template_id}",
-    summary="Удалить шаблон ответа",
+    summary="Удалить шаблон ответа (админы могут удалять любые, пользователи - только свои)",
     tags=["Шаблоны ответов"],
     status_code=status.HTTP_204_NO_CONTENT,
 )
@@ -144,14 +144,7 @@ async def delete_response_template(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    template = (
-        db.query(ResponseTemplate)
-        .filter(
-            ResponseTemplate.id == template_id,
-            ResponseTemplate.user_id == current_user.id
-        )
-        .first()
-    )
+    template = db.query(ResponseTemplate).filter(ResponseTemplate.id == template_id).first()
     
     if not template:
         raise HTTPException(
@@ -159,6 +152,19 @@ async def delete_response_template(
             detail="Шаблон ответа не найден",
         )
     
+    # Check permissions: admin can delete any, regular user can only delete their own
+    if not current_user.is_superuser and template.user_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="У вас нет прав для удаления этого шаблона",
+        )
+    
+    # Delete all attachments referencing this template first
+    db.query(EmailResponseAttachment).filter(
+        EmailResponseAttachment.response_template_id == template_id
+    ).delete()
+    
+    # Then delete the template
     db.delete(template)
     db.commit()
     
