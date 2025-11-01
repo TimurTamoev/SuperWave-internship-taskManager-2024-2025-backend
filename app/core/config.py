@@ -26,7 +26,7 @@ class Settings(BaseSettings):
     SMTP_USERNAME: str = "xoxolly09@mail.ru"
     SMTP_PASSWORD: str = "BaqjUHvfRN4Yy7kzeE2n"
     SMTP_FROM_EMAIL: str = "xoxolly09@mail.ru"
-    SMTP_FROM_NAME: str = "SWTaskManager"
+    SMTP_FROM_NAME: str = "ООО СуперВейв Групп"
     SMTP_USE_TLS: bool = True
 
     class Config:
