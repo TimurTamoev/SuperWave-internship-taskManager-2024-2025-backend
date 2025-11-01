@@ -7,8 +7,6 @@ from app.core.config import settings
 
 
 class SMTPService:
-    """Сервис для отправки email через SMTP"""
-
     def __init__(
         self,
         smtp_server: str = None,
@@ -35,27 +33,12 @@ class SMTPService:
         reply_to_subject: Optional[str] = None,
         is_html: bool = False
     ) -> Tuple[bool, str]:
-        """
-        Отправить email
-        
-        Args:
-            to_email: Email получателя
-            subject: Тема письма
-            body: Тело письма
-            reply_to_subject: Тема исходного письма (для Re:)
-            is_html: Отправлять как HTML
-            
-        Returns:
-            Tuple[success: bool, message: str]
-        """
         if not self.username or not self.password or not self.from_email:
             return False, "SMTP не настроен. Проверьте SMTP_USERNAME, SMTP_PASSWORD и SMTP_FROM_EMAIL в настройках."
 
         try:
-            # Создать сообщение
             msg = MIMEMultipart('alternative')
             
-            # Если это ответ, добавить Re: к теме
             if reply_to_subject:
                 if not reply_to_subject.startswith("Re:"):
                     subject = f"Re: {reply_to_subject}"
@@ -66,7 +49,6 @@ class SMTPService:
             msg['From'] = formataddr((self.from_name, self.from_email))
             msg['To'] = to_email
             
-            # Добавить тело письма
             if is_html:
                 part = MIMEText(body, 'html', 'utf-8')
             else:
@@ -74,16 +56,13 @@ class SMTPService:
             
             msg.attach(part)
             
-            # Подключиться к SMTP серверу
             server = smtplib.SMTP(self.smtp_server, self.smtp_port)
             
             if self.use_tls:
                 server.starttls()
             
-            # Войти
             server.login(self.username, self.password)
             
-            # Отправить
             server.send_message(msg)
             server.quit()
             
@@ -97,12 +76,6 @@ class SMTPService:
             return False, f"Неожиданная ошибка при отправке email: {str(e)}"
 
     def test_connection(self) -> Tuple[bool, str]:
-        """
-        Проверить подключение к SMTP серверу
-        
-        Returns:
-            Tuple[success: bool, message: str]
-        """
         if not self.username or not self.password:
             return False, "SMTP учетные данные не настроены"
         

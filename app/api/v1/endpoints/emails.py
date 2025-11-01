@@ -101,7 +101,7 @@ async def fetch_emails(
         email_service = EmailService(
             email_address=current_user.email,
             password=email_password,
-            imap_server="imap.mail.ru",  
+            imap_server="imap.mail.ru",
             imap_port=993,
         )
         

@@ -1,4 +1,3 @@
-from turtle import title
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
@@ -35,12 +34,6 @@ async def get_all_users(
 ):
     users = db.query(User).offset(skip).limit(limit).all()
     return users
-
-
-"""
-Только админ может создавать пользователей и проводить какие-либо манипуляции с ними. 
-Ввиду специфики назначения сервиса.
-"""
 
 
 @router.get(

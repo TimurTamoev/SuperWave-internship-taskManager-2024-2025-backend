@@ -1,9 +1,3 @@
-"""
-Скрипт для создания пользователя-админа, которому доступна возможность управления пользователями.
-Использование:
-    python create_superuser.py
-"""
-
 from sqlalchemy.orm import Session
 from app.core.database import engine, SessionLocal
 from app.models.user import User

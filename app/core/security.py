@@ -9,10 +9,7 @@ from app.core.config import settings
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-# Create a Fernet cipher from the encryption key
 def _get_fernet() -> Fernet:
-    """Generate a Fernet cipher from the encryption key"""
-    # Ensure the key is 32 bytes
     key = hashlib.sha256(settings.ENCRYPTION_KEY.encode()).digest()
     return Fernet(base64.urlsafe_b64encode(key))
 

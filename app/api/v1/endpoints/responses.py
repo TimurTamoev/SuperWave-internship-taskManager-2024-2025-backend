@@ -111,7 +111,6 @@ async def update_response_template(
             detail="Шаблон ответа не найден",
         )
     
-    # Check permissions: admin can update any, regular user can only update their own
     if not current_user.is_superuser and template.user_id != current_user.id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
@@ -152,19 +151,16 @@ async def delete_response_template(
             detail="Шаблон ответа не найден",
         )
     
-    # Check permissions: admin can delete any, regular user can only delete their own
     if not current_user.is_superuser and template.user_id != current_user.id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="У вас нет прав для удаления этого шаблона",
         )
     
-    # Delete all attachments referencing this template first
     db.query(EmailResponseAttachment).filter(
         EmailResponseAttachment.response_template_id == template_id
     ).delete()
     
-    # Then delete the template
     db.delete(template)
     db.commit()
     

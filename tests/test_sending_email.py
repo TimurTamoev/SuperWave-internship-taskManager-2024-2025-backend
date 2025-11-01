@@ -91,13 +91,11 @@ def attach_template_to_email(token: str, email_uid: str, template_id: int,
     print(f"\n=== Прикрепление шаблона {template_id} к письму {email_uid} ===")
     headers = {"Authorization": f"Bearer {token}"}
     
-    # Минимальные данные: только email_uid и response_template_id
     data = {
         "email_uid": email_uid,
         "response_template_id": template_id,
     }
     
-    # Опциональные поля
     if subject:
         data["email_subject"] = subject
     if from_addr:
@@ -200,12 +198,10 @@ def delete_template(token: str, template_id: int):
 
 
 def full_workflow_test(token: str):
-    """Полный тест workflow"""
     print("\n" + "="*50)
     print("ПОЛНЫЙ ТЕСТ WORKFLOW")
     print("="*50)
     
-    # 1. Создать несколько шаблонов
     template1 = create_response_template(
         token,
         "Благодарность",
@@ -231,10 +227,8 @@ def full_workflow_test(token: str):
         print("\n✗ Не удалось создать шаблоны")
         return
     
-    # 2. Получить все шаблоны
     templates = get_all_templates(token)
     
-    # 3. Обновить один шаблон
     if template1:
         update_template(
             token,
@@ -242,7 +236,6 @@ def full_workflow_test(token: str):
             body="ОБНОВЛЕНО: Спасибо! Ответим в течение 24 часов."
         )
     
-    # 4. Прикрепить шаблоны к тестовым письмам
     email_uid_1 = "test_email_001"
     email_uid_2 = "test_email_002"
     

@@ -1,8 +1,3 @@
-"""
-Тест автоматической отправки email
-Демонстрирует работу send_response=True
-"""
-
 import requests
 import json
 
@@ -23,7 +18,6 @@ def get_auth_token(username: str, password: str) -> str:
 
 
 def test_smtp_connection(token: str):
-    """Проверить SMTP подключение"""
     print("\n=== Проверка SMTP ===")
     headers = {"Authorization": f"Bearer {token}"}
     
@@ -40,7 +34,6 @@ def test_smtp_connection(token: str):
 
 
 def create_template_with_autosend(token: str, title: str, body: str):
-    """Создать шаблон с автоотправкой"""
     print(f"\n=== Создание шаблона с send_response=True ===")
     headers = {"Authorization": f"Bearer {token}"}
     
@@ -50,7 +43,7 @@ def create_template_with_autosend(token: str, title: str, body: str):
         json={
             "title": title,
             "body": body,
-            "send_response": True  # ← КЛЮЧЕВОЙ ПАРАМЕТР
+            "send_response": True
         }
     )
     
@@ -65,7 +58,6 @@ def create_template_with_autosend(token: str, title: str, body: str):
 
 
 def create_template_without_autosend(token: str, title: str, body: str):
-    """Создать шаблон БЕЗ автоотправки"""
     print(f"\n=== Создание шаблона с send_response=False ===")
     headers = {"Authorization": f"Bearer {token}"}
     
@@ -75,7 +67,7 @@ def create_template_without_autosend(token: str, title: str, body: str):
         json={
             "title": title,
             "body": body,
-            "send_response": False  # Email НЕ отправится
+            "send_response": False
         }
     )
     
@@ -90,7 +82,6 @@ def create_template_without_autosend(token: str, title: str, body: str):
 
 
 def attach_and_send(token: str, template_id: int, email_uid: str, email_from: str, email_subject: str = None):
-    """Прикрепить шаблон (с автоотправкой если send_response=True)"""
     print(f"\n=== Прикрепление шаблона {template_id} к письму {email_uid} ===")
     headers = {"Authorization": f"Bearer {token}"}
     
@@ -119,7 +110,6 @@ def attach_and_send(token: str, template_id: int, email_uid: str, email_from: st
 
 
 def get_sent_emails_stats(token: str):
-    """Получить статистику отправленных email"""
     print("\n=== Статистика отправленных email ===")
     headers = {"Authorization": f"Bearer {token}"}
     
@@ -149,7 +139,6 @@ def get_sent_emails_stats(token: str):
 
 
 def get_all_sent_emails(token: str, success_only: bool = None):
-    """Получить все отправленные email"""
     print(f"\n=== Все отправленные email ===")
     headers = {"Authorization": f"Bearer {token}"}
     
@@ -176,12 +165,10 @@ def get_all_sent_emails(token: str, success_only: bool = None):
 
 
 def demonstration_workflow(token: str):
-    """Полная демонстрация функционала"""
     print("\n" + "="*60)
     print("ДЕМОНСТРАЦИЯ АВТОМАТИЧЕСКОЙ ОТПРАВКИ EMAIL")
     print("="*60)
     
-    # 1. Проверить SMTP
     smtp_works = test_smtp_connection(token)
     
     if not smtp_works:
@@ -192,21 +179,18 @@ def demonstration_workflow(token: str):
         print("  SMTP_FROM_EMAIL=your_email@mail.ru")
         print("\nПродолжение демонстрации (без реальной отправки)...")
     
-    # 2. Создать шаблон С автоотправкой
     template_auto = create_template_with_autosend(
         token,
         "Автоответ",
         "Спасибо за обращение! Мы ответим в течение 24 часов."
     )
     
-    # 3. Создать шаблон БЕЗ автоотправки
     template_manual = create_template_without_autosend(
         token,
         "Заметка",
         "Это только заметка, email не отправится."
     )
     
-    # 4. Прикрепить шаблон с автоотправкой
     if template_auto:
         print("\n--- Тест 1: Прикрепление с автоотправкой ---")
         attach_and_send(
@@ -217,7 +201,6 @@ def demonstration_workflow(token: str):
             "Вопрос по продукту"
         )
     
-    # 5. Прикрепить шаблон без автоотправки
     if template_manual:
         print("\n--- Тест 2: Прикрепление БЕЗ автоотправки ---")
         attach_and_send(
@@ -228,7 +211,6 @@ def demonstration_workflow(token: str):
             "Другой вопрос"
         )
     
-    # 6. Прикрепить с автоотправкой, но БЕЗ email_from (ошибка)
     if template_auto:
         print("\n--- Тест 3: Автоотправка БЕЗ email_from (будет ошибка) ---")
         headers = {"Authorization": f"Bearer {token}"}
@@ -238,7 +220,6 @@ def demonstration_workflow(token: str):
             json={
                 "email_uid": "test_email_003",
                 "response_template_id": template_auto["id"],
-                # НЕТ email_from!
             }
         )
         if response.status_code == 201:
@@ -246,13 +227,10 @@ def demonstration_workflow(token: str):
         else:
             print(f"Ошибка: {response.text}")
     
-    # 7. Показать статистику
     get_sent_emails_stats(token)
     
-    # 8. Показать все отправленные
     get_all_sent_emails(token)
     
-    # 9. Показать только ошибки
     print("\n--- Только ошибки ---")
     get_all_sent_emails(token, success_only=False)
     
@@ -278,7 +256,6 @@ def main():
         token = get_auth_token(USERNAME, PASSWORD)
         print("✓ Успешный вход")
         
-        # Запустить демонстрацию
         demonstration_workflow(token)
         
     except Exception as e:
